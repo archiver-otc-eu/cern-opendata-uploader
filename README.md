@@ -20,7 +20,7 @@ Script has the following list of **required** arguments:
                         Storage must be created as an `imported` storage with
                         path type equal to `canonical`.
 * `-t`, `--token` - Onedata access token.
-* `-c`, `--collection-url` - Open data collection URL. Many collections can be passed (e.g.  `-c URL1 -c URL2`).
+* `-c`, `--collection-url` - Open data collection URL. Many collections can be passed (e.g. `-c URL1 -c URL2`).
 
 Additionally, script has the following list of **optional** arguments:
 * `-m`, `--file-mode` - POSIX mode with which files will be registered, represented as an octal string (default: `"664"`)

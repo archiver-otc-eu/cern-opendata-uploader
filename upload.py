@@ -48,7 +48,7 @@ requiredNamed.add_argument(
 requiredNamed.add_argument(
     '-c', '--collection-url',
     action='append',
-    help='Open data collection URL. Many collections can be passed (e.g.  `-c URL1 -c URL2`).',
+    help='Open data collection URL. Many collections can be passed (e.g. `-c URL1 -c URL2`).',
     dest='collections',
     required=True)
 
@@ -116,7 +116,7 @@ def register_file(storage_file_id, size, checksum):
         'autoDetectAttributes': not args.disable_auto_detection
     }
     try:
-        response = requests.post(REGISTER_FILE_ENDPOINT.format(args.host), json=payload, headers=headers)
+        response = requests.post(REGISTER_FILE_ENDPOINT.format(args.host), json=payload, headers=headers, verify=(not args.disable_cert_verification))
         if response.status_code == HTTPStatus.CREATED:
             return True
         else:
