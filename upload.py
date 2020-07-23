@@ -20,28 +20,28 @@ requiredNamed = parser.add_argument_group('required named arguments')
 requiredNamed.add_argument(
     '-H', '--host',
     action='store',
-    help='Oneprovider host',
+    help='Oneprovider host.',
     dest='host',
     required=True)
 
 requiredNamed.add_argument(
     '-spi', '--space-id',
     action='store',
-    help='Id of the space in which the file will be registered.',
+    help='Id of the space in which the files will be registered.',
     dest='space_id',
     required=True)
 
 requiredNamed.add_argument(
     '-sti', '--storage-id',
     action='store',
-    help='Id of the storage on which the file is located. Storage must be created as an `imported` storage with path type equal to `canonical`.',
+    help='Id of the storage on which the files are located. Storage must be created as an `imported` storage with path type equal to `canonical`.',
     dest='storage_id',
     required=True)
 
 requiredNamed.add_argument(
     '-t', '--token',
     action='store',
-    help='Onedata access token',
+    help='Onedata access token.',
     dest='token',
     required=True)
 
@@ -52,29 +52,38 @@ requiredNamed.add_argument(
     dest='collections',
     required=True)
 
-requiredNamed.add_argument(
+parser.add_argument(
     '-m', '--file-mode',
     action='store',
-    help='POSIX mode with which files will be registered, represented as an octal string',
+    help='POSIX mode with which files will be registered, represented as an octal string.',
     dest='mode',
-    default="664"
+    default="0664"
 )
 
-requiredNamed.add_argument(
+parser.add_argument(
     '-dd', '--disable-auto-detection',
     action='store_true',
-    help='Do not automatically detect file attributes and do not check whether file exists on storage.',
+    help='Flag which disables automatic detection of file attributes and verification whether file exists on storage. '
+         'Passing this flag results in faster registration of files but there is a risk of registering files that '
+         'don\'t exist on storage. Such files will be visible in the space but not accessible.',
     dest='disable_auto_detection',
     default=False
 )
 
 parser.add_argument(
-    '-logging', '--logging-frequency',
+    '-lf', '--logging-frequency',
     action='store',
     type=int,
-    help='Frequency of logging. Log will occur after registering every logging_freq number of files',
+    help='Frequency of logging. Log will occur after registering every logging_freq number of files.',
     dest='logging_freq',
     default=None)
+
+parser.add_argument(
+    '-dv', '--disable-cert-verification',
+    action='store_true',
+    help='Flag which disables verification of SSL certificate.',
+    dest='disable_cert_verification',
+    default=False)
 
 
 REGISTER_FILE_ENDPOINT = "https://{0}/api/v3/oneprovider/data/register"
