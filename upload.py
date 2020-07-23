@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import argparse
+import configargparse
 import shutil
 import tempfile
 import urllib.request
@@ -11,49 +11,52 @@ import os
 import logging
 from http import HTTPStatus
 
-parser = argparse.ArgumentParser(
-    formatter_class=argparse.ArgumentDefaultsHelpFormatter,
-    description='Register files in the Onedata system')
+DEFAULT_CONFIG_FILE = 'config.yaml'
+
+parser = configargparse.ArgumentParser(
+    formatter_class=configargparse.ArgumentDefaultsHelpFormatter,
+    default_config_files=['config.yaml'],
+    description='Register files in the Onedata system.')
 
 requiredNamed = parser.add_argument_group('required named arguments')
 
 requiredNamed.add_argument(
-    '-H', '--host',
+    '--host', '-H',
     action='store',
     help='Oneprovider host.',
     dest='host',
     required=True)
 
 requiredNamed.add_argument(
-    '-spi', '--space-id',
+    '--space-id', '-spi',
     action='store',
     help='Id of the space in which the files will be registered.',
     dest='space_id',
     required=True)
 
 requiredNamed.add_argument(
-    '-sti', '--storage-id',
+    '--storage-id', '-sti',
     action='store',
     help='Id of the storage on which the files are located. Storage must be created as an `imported` storage with path type equal to `canonical`.',
     dest='storage_id',
     required=True)
 
 requiredNamed.add_argument(
-    '-t', '--token',
+    '--token', '-t',
     action='store',
     help='Onedata access token.',
     dest='token',
     required=True)
 
 requiredNamed.add_argument(
-    '-c', '--collection-url',
+    '--collection-url', '-c',
     action='append',
     help='Open data collection URL. Many collections can be passed (e.g. `-c URL1 -c URL2`).',
     dest='collections',
     required=True)
 
 parser.add_argument(
-    '-m', '--file-mode',
+    '--file-mode', '-m',
     action='store',
     help='POSIX mode with which files will be registered, represented as an octal string.',
     dest='mode',
@@ -61,7 +64,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '-dd', '--disable-auto-detection',
+    '--disable-auto-detection', '-dd',
     action='store_true',
     help='Flag which disables automatic detection of file attributes and verification whether file exists on storage. '
          'Passing this flag results in faster registration of files but there is a risk of registering files that '
@@ -71,7 +74,7 @@ parser.add_argument(
 )
 
 parser.add_argument(
-    '-lf', '--logging-frequency',
+    '--logging-frequency', '-lf',
     action='store',
     type=int,
     help='Frequency of logging. Log will occur after registering every logging_freq number of files.',
@@ -79,11 +82,19 @@ parser.add_argument(
     default=None)
 
 parser.add_argument(
-    '-dv', '--disable-cert-verification',
+    '--disable-cert-verification', '-dv',
     action='store_true',
     help='Flag which disables verification of SSL certificate.',
     dest='disable_cert_verification',
     default=False)
+
+parser.add_argument(
+    '--config-file',
+    action='store',
+    is_config_file=True,
+    help='Path to config file which will override the default {0}'.format(DEFAULT_CONFIG_FILE),
+    dest='config_file'
+)
 
 
 REGISTER_FILE_ENDPOINT = "https://{0}/api/v3/oneprovider/data/register"
@@ -185,5 +196,5 @@ for collection_url in args.collections:
         total_size += size_sum
         total_count += count
 
-print("Registered files: {0}".format(total_count))
+print("\nTotal registered files count: {0}".format(total_count))
 print("Total size: {0}".format(total_size))
