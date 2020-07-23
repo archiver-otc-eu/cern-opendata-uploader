@@ -48,7 +48,7 @@ requiredNamed.add_argument(
 requiredNamed.add_argument(
     '-c', '--collection-url',
     action='append',
-    help='Open data collection URL.',
+    help='Open data collection URL. Many collections can be passed (e.g.  `-c URL1 -c URL2`).',
     dest='collections',
     required=True)
 
